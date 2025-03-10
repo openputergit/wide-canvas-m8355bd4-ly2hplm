@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College Timetable Manager</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+</head>
+<style>
+    body {
+        font-family: 'Inter', sans-serif;
+    }
+    .modal {
+        transition: opacity 0.3s ease-in-out;
+    }
+</style>
+<body class="bg-gray-50">
+    <!-- Login Section -->
+    <div id="loginSection" class="min-h-screen flex items-center justify-center">
+        <div class="bg-white p-8 rounded-lg shadow-lg w-96">
+            <h2 class="text-2xl font-bold mb-6 text-center text-blue-600">College Timetable Manager</h2>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Email</label>
+                    <input type="email" id="email" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border" placeholder="email@college.edu">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Password</label>
+                    <input type="password" id="password" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border" placeholder="••••••••">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Role</label>
+                    <select id="role" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
+                        <option value="student">Student</option>
+                        <option value="faculty">Faculty</option>
+                    </select>
+                </div>
+                <button onclick="login()" class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition">Login</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Dashboard -->
+    <div id="dashboard" class="hidden">
+        <!-- Navigation -->
+        <nav class="bg-blue-600 text-white p-4">
+            <div class="container mx-auto flex justify-between items-center">
+                <h1 class="text-xl font-bold">College Timetable Manager</h1>
+                <div class="flex space-x-4">
+                    <button onclick="showSection('departments')" class="hover:text-blue-200">Departments</button>
+                     <button onclick="showSection('Subjects')" class="hover:text-blue-200">Subjects</button>
+                    <button onclick="showSection('slots')" class="hover:text-blue-200">Time Slots</button>
+                    <button onclick="showSection('timetable')" class="hover:text-blue-200">Timetable</button>
+                    <button onclick="logout()" class="hover:text-blue-200">Logout</button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Content Sections -->
+        <div class="container mx-auto p-6">
+            <!-- Timetable Section -->
+            <div id="timetableSection" class="space-y-6">
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h2 class="text-xl font-bold mb-4">Current Lecture</h2>
+                    <div id="currentLecture" class="p-4 bg-blue-50 rounded-md">
+                        No ongoing lecture
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h2 class="text-xl font-bold mb-4">Next Lecture</h2>
+                    <div id="nextLecture" class="p-4 bg-green-50 rounded-md">
+                        No upcoming lecture
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h2 class="text-xl font-bold mb-4">Weekly Timetable</h2>
+                     <h2 class="text-xl font-bold mb-4">daily Timetable</h2>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full table-auto">
+                            <thead>
+                                <tr class="bg-gray-100">
+                                    <th class="p-4">Time</th>
+                                    <th class="p-4">Monday</th>
+                                    <th class="p-4">Tuesday</th>
+                                    <th class="p-4">Wednesday</th>
+                                    <th class="p-4">Thursday</th>
+                                    <th class="p-4">Friday</th>
+                                    <th class="p-4">Saturday</th>
+                                </tr>
+                            </thead>
+                            <tbody id="timetableBody">
+                                <!-- Timetable data will be inserted here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Departments Section -->
+            <div id="departmentsSection" class="hidden">
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h2 class="text-xl font-bold mb-4">Departments</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div class="p-4 border rounded-md">
+                            <h3 class="font-bold">Master of Computer Application</h3>
+                            <p class="text-gray-600">Head: S.B.Sarvaiya </p>
+                        </div>
+                        </div>
+                    </div>
+                    </div>
+            <!-- Subjects Section -->
+            <div id="subjectsSection" class="hidden">
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h2 class="text-xl font-bold mb-4">Add Course</h2>
+                    <form class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Subjects Name</label>
+                            <input type="text" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Subject Code</label>
+                            <input type="text" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
+                        </div>
+                        <button type="button" class="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition">Add Subject</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Time Slots Section -->
+            <div id="slotsSection" class="hidden">
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h2 class="text-xl font-bold mb-4">Add Time Slot</h2>
+                    <form class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Start Time</label>
+                            <input type="time" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">End Time</label>
+                            <input type="time" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Day</label>
+                            <select class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
+                                <option>Monday</option>
+                                <option>Tuesday</option>
+                                <option>Wednesday</option>
+                                <option>Thursday</option>
+                                <option>Friday</option>
+                                <option>Saturday</option>
+                                
+                            </select>
+                        </div>
+                        <button type="button" class="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition">Add Time Slot</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample timetable data
+        const timetableData = {
+            "Monday": [
+                { time: "11:30 - 12:30", subject: "DS", teacher: "S.B.Sarvaiya" },
+                { time: "12:30 - 1:30", subject: "AI", teacher: "Rana Afreen Shaikh" },
+                { time: "1:30 - 2:00", RECESS }
+                { time: "2:00 - 3:00", subject: "CSC", teacher: "K.P.Raghuwanshi" }
+                { time: "3:00 - 5:00", subject: "LAB", teacher: "KPR+SKT+SBS" }
+            ],
+            "Tuesday": [
+                { time: "11:30 - 12:30", subject: "ADBMS", teacher: "S.K.Totade" },
+                { time: "12:30 - 1:30", subject: "DS", teacher: "S.B.Sarvaiya" },
+                { time: "1:30 - 2:00", RECESS }
+                { time: "2:00 - 3:00", subject: "AI", teacher: "Rana Afreen Shaikh" }
+                { time: "3:00 - 5:00", subject: "LAB", teacher: "RAS+SBB+SBS" }
+            ]
+             "Wednesday": [
+                { time: "11:30 - 12:30", subject: "AI", teacher: "Rana Afreen Shaikh" },
+                { time: "12:30 - 1:30", subject: "ADBMS", teacher: "S.K.Totade" },
+                { time: "1:30 - 2:00", RECESS }
+                { time: "2:00 - 3:00", subject: "SE", teacher: "S.B.Bele" }
+                { time: "3:00 - 5:00", subject: "LAB", teacher: "SKT+SBB+KPR" }
+            ] 
+            "Thursday": [
+                { time: "11:30 - 12:30", subject: "CSC", teacher: "S.K.Totade" },
+                { time: "12:30 - 1:30", subject: "AI", teacher: "Rana Afreen Shaikh" },
+                { time: "1:30 - 2:00", RECESS }
+                { time: "2:00 - 3:00", subject: "SE", teacher: "S.B.Bele" }
+                { time: "3:00 - 5:00", subject: "LAB", teacher: "SBS+RAS+SKT" }
+            ]
+            "Friday": [
+                { time: "11:30 - 12:30", subject: "DE", teacher: "S.B.Bele" },
+                { time: "12:30 - 1:30", subject: "ADBMS", teacher: "S.K.Totade" },
+                { time: "1:30 - 2:00", RECESS }
+                { time: "2:00 - 3:00", subject: "DS", teacher: "S.B.Sarvaiya" }
+                { time: "3:00 - 4:00", subject: "CSC", teacher: "K.P.Radhuwanshi" }
+            ] 
+            "Saturday": [
+                { time: "11:30 - 12:30", subject: "DE", teacher: "S.B.Bele" },
+                { time: "12:30 - 1:30", subject: "ADBMS", teacher: "S.K.Totade" },
+                { time: "1:30 - 2:00", RECESS }
+                { time: "2:00 - 3:00", subject: "DS", teacher: "S.B.Sarvaiya" }
+                { time: "3:00 - 4:00", subject: "CSC", teacher: "K.P.Raghuwanshi" }
+            ]
+            // Add more days as needed
+        };
+
+        // Request notification permission
+        if ("Notification" in window) {
+            Notification.requestPermission();
+        }
+
+        // Login function
+        function login() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const role = document.getElementById('role').value;
+
+            if (email && password) {
+                document.getElementById('loginSection').classList.add('hidden');
+                document.getElementById('dashboard').classList.remove('hidden');
+                showSection('timetable');
+                startTimetableTracking();
+            }
+        }
+
+        // Logout function
+        function logout() {
+            document.getElementById('dashboard').classList.add('hidden');
+            document.getElementById('loginSection').classList.remove('hidden');
+        }
+
+        // Show different sections
+        function showSection(section) {
+            const sections = ['departments', 'subjects', 'slots','timetable'];
+            sections.forEach(s => {
+                document.getElementById(`${s}Section`).classList.add('hidden');
+            });
+            document.getElementById(`${section}Section`).classList.remove('hidden');
+        }
+
+        // Update current and next lecture
+        function updateLectureInfo() {
+            const now = new Date();
+            const day = now.toLocaleDateString('en-US', { weekday: 'long' });
+            const time = now.getHours() * 60 + now.getMinutes();
+
+            if (timetableData[day]) {
+                let currentLecture = null;
+                let nextLecture = null;
+
+                for (const lecture of timetableData[day]) {
+                    const [startTime, endTime] = lecture.time.split(' - ');
+                    const [startHour, startMinute] = startTime.split(':').map(Number);
+                    const [endHour, endMinute] = endTime.split(':').map(Number);
+                    
+                    const lectureStartTime = startHour * 60 + startMinute;
+                    const lectureEndTime = endHour * 60 + endMinute;
+
+                    if (time >= lectureStartTime && time < lectureEndTime) {
+                        currentLecture = lecture;
+                    } else if (time < lectureStartTime && (!nextLecture || lectureStartTime < (nextLecture.time.split(' - ')[0].split(':').map(Number)[0] * 60 + nextLecture.time.split(' - ')[0].split(':').map(Number)[1]))) {
+                        nextLecture = lecture;
+                    }
+                }
+
+                document.getElementById('currentLecture').innerHTML = currentLecture ?
+                    `<div class="font-bold">${currentLecture.subject}</div>
+                     <div>Time: ${currentLecture.time}</div>
+                     <div>Teacher: ${currentLecture.teacher}</div>` :
+                    'No ongoing lecture';
+
+                document.getElementById('nextLecture').innerHTML = nextLecture ?
+                    `<div class="font-bold">${nextLecture.subject}</div>
+                     <div>Time: ${nextLecture.time}</div>
+                     <div>Teacher: ${nextLecture.teacher}</div>` :
+                    'No upcoming lecture';
+
+                // Send notifications
+                if (currentLecture && Notification.permission === "granted") {
+                    new Notification("Current Lecture", {
+                        body: `${currentLecture.subject} with ${currentLecture.teacher}\nTime: ${currentLecture.time}`
+                    });
+                }
+            }
+        }
+
+        // Start tracking timetable
+        function startTimetableTracking() {
+            updateLectureInfo();
+            setInterval(updateLectureInfo, 60000); // Update every minute
+        }
+
+        // Initialize timetable
+        function initializeTimetable() {
+            const timeSlots = ["09:00 - 10:30", "10:45 - 12:15", "13:15 - 14:45"];
+            const tbody = document.getElementById('timetableBody');
+            
+            timeSlots.forEach(timeSlot => {
+                const row = document.createElement('tr');
+                row.innerHTML = `<td class="border p-4">${timeSlot}</td>`;
+                
+                ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'].forEach(day => {
+                    const lecture = timetableData[day]?.find(l => l.time === timeSlot);
+                    row.innerHTML += `
+                        <td class="border p-4">
+                            ${lecture ? `
+                                <div class="font-bold">${lecture.subject}</div>
+                                <div class="text-sm text-gray-600">${lecture.teacher}</div>
+                            ` : '-'}
+                        </td>
+                    `;
+                });
+                
+                tbody.appendChild(row);
+            });
+        }
+
+        // Initialize on load
+        window.onload = initializeTimetable;
+    </script>
+<script>document.body.addEventListener('wheel', e => { if (!e.ctrlKey) return; e.preventDefault(); return }, { passive: false })</script>
+	</body>
+</html>
